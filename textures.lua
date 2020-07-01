@@ -2,9 +2,9 @@ local textures = {};
 
 local buttons = {
   { name = 'carb',  texture = nil },
-  { name = 'carb',  texture = nil },
-  { name = 'carb',  texture = nil },
-  { name = 'carb',  texture = nil },
+  { name = 'titan',  texture = nil },
+  { name = 'levi',  texture = nil },
+  { name = 'garuda',  texture = nil },
   { name = 'carb',  texture = nil },
   { name = 'carb',  texture = nil },
   { name = 'carb',  texture = nil },
@@ -38,7 +38,6 @@ function textures:unload()
   for i = 1, #buttons do
     local texture = buttons[i];
     if (texture.texture) then
-      print(i);
       texture.texture:Release();
       texture.texture = nil;
       texture.ptr = nil;
