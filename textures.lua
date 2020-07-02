@@ -5,12 +5,14 @@ local buttons = {
   { name = 'titan',  texture = nil },
   { name = 'levi',  texture = nil },
   { name = 'garuda',  texture = nil },
-  { name = 'carb',  texture = nil },
-  { name = 'carb',  texture = nil },
-  { name = 'carb',  texture = nil },
-  { name = 'carb',  texture = nil },
-  { name = 'carb',  texture = nil },
-  { name = 'carb',  texture = nil },
+  { name = 'ifrit',  texture = nil },
+  { name = 'shiva',  texture = nil },
+  { name = 'ramuh',  texture = nil },
+  { name = 'fenrir',  texture = nil },
+  { name = 'diabolos',  texture = nil },
+  { name = 'cait',  texture = nil },
+  { name = 'atomos',  texture = nil },
+  { name = 'siren',  texture = nil },
 };
 
 local function load_texture(name)

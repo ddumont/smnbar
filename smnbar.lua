@@ -14,7 +14,7 @@ local BUTTON_BORDER = 1; -- can't seem to change this.
 
 local BUTTONS = #textures:buttons();
 local DRAG_W = 15;
-local BUTTON_W = 64;
+local BUTTON_W = 54;
 local BUTTON_H = BUTTON_W;
 local BETWEEN_BUTTONS = (BUTTONS - 1) * (ITEM_SPACING_W + BUTTON_BORDER);
 local BUTTONBAR_W = (BUTTON_W + FRAME_PADDING_W * 2) * BUTTONS + BETWEEN_BUTTONS;
