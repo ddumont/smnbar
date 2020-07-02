@@ -12,15 +12,9 @@ local ITEM_SPACING_W = 4;
 local ITEM_SPACING_H = 0;
 local BUTTON_BORDER = 1; -- can't seem to change this.
 
-local BUTTONS = #textures:buttons();
 local DRAG_W = 15;
 local BUTTON_W = 54;
 local BUTTON_H = BUTTON_W;
-local BETWEEN_BUTTONS = (BUTTONS - 1) * (ITEM_SPACING_W + BUTTON_BORDER);
-local BUTTONBAR_W = (BUTTON_W + FRAME_PADDING_W * 2) * BUTTONS + BETWEEN_BUTTONS;
-local BUTTONBAR_H = BUTTON_H + FRAME_PADDING_H * 2 + FRAME_PADDING_H * 2 + FRAME_PADDING_H * 2;
-local FRAME_W = DRAG_W + BUTTONBAR_W + FRAME_PADDING_W * 2 + FRAME_PADDING_W * 2;
-local FRAME_H = BUTTONBAR_H + FRAME_PADDING_H * 2 + FRAME_PADDING_H * 2;
 
 local FRAME_FLAGS = bit.bor(
   ImGuiWindowFlags_NoTitleBar,
@@ -32,11 +26,25 @@ local FRAME_FLAGS = bit.bor(
 );
 
 ashita.register_event('load', function()
-  textures:load();
+  textures:Load();
 end);
 
+local alt = false;
+
 ashita.register_event('render', function()
-  local buttons = textures:buttons();
+  local buttons;
+  if (alt) then
+    buttons = textures:AltButtons();
+  else
+    buttons = textures:Buttons();
+  end
+  local BUTTONS = #buttons;
+  local BETWEEN_BUTTONS = (BUTTONS - 1) * (ITEM_SPACING_W + BUTTON_BORDER);
+  local BUTTONBAR_W = (BUTTON_W + FRAME_PADDING_W * 2) * BUTTONS + BETWEEN_BUTTONS;
+  local BUTTONBAR_H = BUTTON_H + FRAME_PADDING_H * 2 + FRAME_PADDING_H * 2 + FRAME_PADDING_H * 2;
+  local FRAME_W = DRAG_W + BUTTONBAR_W + FRAME_PADDING_W * 2 + FRAME_PADDING_W * 2;
+  local FRAME_H = BUTTONBAR_H + FRAME_PADDING_H * 2 + FRAME_PADDING_H * 2;
+
   imgui.PushStyleVar(ImGuiStyleVar_FramePadding, FRAME_PADDING_W, FRAME_PADDING_H);
   imgui.SetNextWindowSize(FRAME_W, FRAME_H, ImGuiSetCond_Always);
   if (not imgui.Begin('smnbar', true, FRAME_FLAGS)) then return imgui.End() end
@@ -56,6 +64,17 @@ ashita.register_event('render', function()
   imgui.PopStyleVar();
 end);
 
+ashita.register_event('key', function(key, down, blocked)
+    if (key == 0x38) then -- left alt
+      if (down) then
+        alt = true;
+      else
+        alt = false;
+      end
+    end
+    return false;
+end);
+
 ashita.register_event('unload', function()
-  textures:unload();
+  textures:Unload();
 end);

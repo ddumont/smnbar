@@ -15,6 +15,17 @@ local buttons = {
   { name = 'siren',  texture = nil },
 };
 
+local alt_buttons = {
+  { name = 'light',  texture = nil },
+  { name = 'earth',  texture = nil },
+  { name = 'water',  texture = nil },
+  { name = 'wind',  texture = nil },
+  { name = 'fire',  texture = nil },
+  { name = 'ice',  texture = nil },
+  { name = 'thunder',  texture = nil },
+  { name = 'dark',  texture = nil },
+};
+
 local function load_texture(name)
   local path = string.format('%s/64/%s.png', _addon.path, name);
 
@@ -28,15 +39,20 @@ local function load_texture(name)
   return texture;
 end
 
-function textures:load()
+function textures:Load()
   for i = 1, #buttons do
     local texture = buttons[i];
     texture.texture = load_texture(texture.name);
     texture.ptr = texture.texture:Get();
   end
+  for i = 1, #alt_buttons do
+    local texture = alt_buttons[i];
+    texture.texture = load_texture(texture.name);
+    texture.ptr = texture.texture:Get();
+  end
 end
 
-function textures:unload()
+function textures:Unload()
   for i = 1, #buttons do
     local texture = buttons[i];
     if (texture.texture) then
@@ -45,10 +61,22 @@ function textures:unload()
       texture.ptr = nil;
     end
   end
+  for i = 1, #alt_buttons do
+    local texture = alt_buttons[i];
+    if (texture.texture) then
+      texture.texture:Release();
+      texture.texture = nil;
+      texture.ptr = nil;
+    end
+  end
 end
 
-function textures:buttons()
+function textures:Buttons()
   return buttons;
+end
+
+function textures:AltButtons()
+  return alt_buttons;
 end
 
 return textures;
