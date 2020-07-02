@@ -53,8 +53,8 @@ ashita.register_event('render', function()
   imgui.PushStyleVar(ImGuiStyleVar_ItemSpacing, ITEM_SPACING_W, ITEM_SPACING_H);
   for i = 1, BUTTONS do
     if (i > 1) then imgui.SameLine(); end
-    if (imgui.ImageButton(buttons[i].ptr, BUTTON_W, BUTTON_H)) then
-
+    if (imgui.ImageButton(buttons[i].ptr, BUTTON_W, BUTTON_H) and buttons[i].action) then
+      buttons[i].action();
     end
   end
   imgui.PopStyleVar();

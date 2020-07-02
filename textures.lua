@@ -1,29 +1,30 @@
+local actions = require 'actions';
 local textures = {};
 
 local buttons = {
-  { name = 'carb',  texture = nil },
-  { name = 'titan',  texture = nil },
-  { name = 'levi',  texture = nil },
-  { name = 'garuda',  texture = nil },
-  { name = 'ifrit',  texture = nil },
-  { name = 'shiva',  texture = nil },
-  { name = 'ramuh',  texture = nil },
-  { name = 'fenrir',  texture = nil },
-  { name = 'diabolos',  texture = nil },
-  { name = 'cait',  texture = nil },
-  { name = 'atomos',  texture = nil },
-  { name = 'siren',  texture = nil },
+  { texture = nil, actions = nil, name = 'carbuncle' },
+  { texture = nil, actions = nil, name = 'titan' },
+  { texture = nil, actions = nil, name = 'leviathan' },
+  { texture = nil, actions = nil, name = 'garuda' },
+  { texture = nil, actions = nil, name = 'ifrit' },
+  { texture = nil, actions = nil, name = 'shiva' },
+  { texture = nil, actions = nil, name = 'ramuh' },
+  { texture = nil, actions = nil, name = 'fenrir' },
+  { texture = nil, actions = nil, name = 'diabolos' },
+  { texture = nil, actions = nil, name = 'cait sith' },
+  { texture = nil, actions = nil, name = 'atomos' },
+  { texture = nil, actions = nil, name = 'siren' },
 };
 
 local ctrl_buttons = {
-  { name = 'light',  texture = nil },
-  { name = 'earth',  texture = nil },
-  { name = 'water',  texture = nil },
-  { name = 'wind',  texture = nil },
-  { name = 'fire',  texture = nil },
-  { name = 'ice',  texture = nil },
-  { name = 'thunder',  texture = nil },
-  { name = 'dark',  texture = nil },
+  { texture = nil, actions = nil, name = 'light spirit' },
+  { texture = nil, actions = nil, name = 'earth spirit' },
+  { texture = nil, actions = nil, name = 'water spirit' },
+  { texture = nil, actions = nil, name = 'wind spirit' },
+  { texture = nil, actions = nil, name = 'fire spirit' },
+  { texture = nil, actions = nil, name = 'ice spirit' },
+  { texture = nil, actions = nil, name = 'thunder spirit' },
+  { texture = nil, actions = nil, name = 'dark spirit' },
 };
 
 local function load_texture(name)
@@ -40,33 +41,22 @@ local function load_texture(name)
 end
 
 function textures:Load()
-  for i = 1, #buttons do
-    local texture = buttons[i];
-    texture.texture = load_texture(texture.name);
-    texture.ptr = texture.texture:Get();
-  end
-  for i = 1, #ctrl_buttons do
-    local texture = ctrl_buttons[i];
-    texture.texture = load_texture(texture.name);
-    texture.ptr = texture.texture:Get();
+  for _, textures in ipairs({ buttons, ctrl_buttons }) do
+    for i, texture in ipairs(textures) do
+      texture.texture = load_texture(texture.name);
+      texture.ptr = texture.texture:Get();
+      texture.action = actions:Get(texture.name);
+    end
   end
 end
 
 function textures:Unload()
-  for i = 1, #buttons do
-    local texture = buttons[i];
-    if (texture.texture) then
+  for _, textures in ipairs({ buttons, ctrl_buttons }) do
+    for i, texture in ipairs(textures) do
       texture.texture:Release();
       texture.texture = nil;
       texture.ptr = nil;
-    end
-  end
-  for i = 1, #ctrl_buttons do
-    local texture = ctrl_buttons[i];
-    if (texture.texture) then
-      texture.texture:Release();
-      texture.texture = nil;
-      texture.ptr = nil;
+      texture.action = nil;
     end
   end
 end
