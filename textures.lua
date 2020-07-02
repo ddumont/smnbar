@@ -15,7 +15,7 @@ local buttons = {
   { name = 'siren',  texture = nil },
 };
 
-local alt_buttons = {
+local ctrl_buttons = {
   { name = 'light',  texture = nil },
   { name = 'earth',  texture = nil },
   { name = 'water',  texture = nil },
@@ -45,8 +45,8 @@ function textures:Load()
     texture.texture = load_texture(texture.name);
     texture.ptr = texture.texture:Get();
   end
-  for i = 1, #alt_buttons do
-    local texture = alt_buttons[i];
+  for i = 1, #ctrl_buttons do
+    local texture = ctrl_buttons[i];
     texture.texture = load_texture(texture.name);
     texture.ptr = texture.texture:Get();
   end
@@ -61,8 +61,8 @@ function textures:Unload()
       texture.ptr = nil;
     end
   end
-  for i = 1, #alt_buttons do
-    local texture = alt_buttons[i];
+  for i = 1, #ctrl_buttons do
+    local texture = ctrl_buttons[i];
     if (texture.texture) then
       texture.texture:Release();
       texture.texture = nil;
@@ -75,8 +75,8 @@ function textures:Buttons()
   return buttons;
 end
 
-function textures:AltButtons()
-  return alt_buttons;
+function textures:CtrlButtons()
+  return ctrl_buttons;
 end
 
 return textures;

@@ -29,12 +29,12 @@ ashita.register_event('load', function()
   textures:Load();
 end);
 
-local alt = false;
+local ctrl = false;
 
 ashita.register_event('render', function()
   local buttons;
-  if (alt) then
-    buttons = textures:AltButtons();
+  if (ctrl) then
+    buttons = textures:CtrlButtons();
   else
     buttons = textures:Buttons();
   end
@@ -65,14 +65,14 @@ ashita.register_event('render', function()
 end);
 
 ashita.register_event('key', function(key, down, blocked)
-    if (key == 0x38) then -- left alt
-      if (down) then
-        alt = true;
-      else
-        alt = false;
-      end
+  if (key == 0x1D or key == 0x9D) then -- ctrl
+    if (down) then
+      ctrl = true;
+    else
+      ctrl = false;
     end
-    return false;
+  end
+  return false;
 end);
 
 ashita.register_event('unload', function()
