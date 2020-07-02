@@ -1,6 +1,6 @@
 _addon.author   = 'siete';
 _addon.name     = 'smnbar';
-_addon.version  = '0.1';
+_addon.version  = '1.0.0';
 
 require 'common';
 require 'd3d8';
