@@ -1,6 +1,6 @@
 require 'timer';
 local util = require 'util';
-local petactions = require 'petactions';
+local mgr = AshitaCore:GetResourceManager();
 
 local function do_summon(thing)
   local target = '<me>';
@@ -32,45 +32,28 @@ function actions:Get(thing)
   end;
 end
 
-function actions:GetPetActions()
-  if (not util:HasPet()) then return end
-  local mgr = AshitaCore:GetResourceManager();
+function actions:GetPetAction(action, ranks, target)
   local player = AshitaCore:GetDataManager():GetPlayer();
-  local pet = util:PetEntity().Name:lower();
-  local pactions = petactions[pet];
-  local npactions = #pactions;
+  local rank = 1;
 
-  local actions = {};
-  for i = 1, npactions do
-    -- always use pactions[i] here to avoid pointer drift through the loop.
-    -- if you set a var outside the loop it will always be the last action.
-
-    local rank = 1;
-    for x = pactions[i].ranks, 1, -1 do
-      local ability;
-      if (x == 1) then
-        ability = pactions[i].action;
-      else
-        ability = mgr:GetAbilityByName(pactions[i].action.Name[2] .. ' ' .. ('i'):rep(x), 2);
-      end
-      if (player:HasAbility(ability.Id)) then
-        rank = x;
-        break;
+  for rank = ranks, 1, -1 do
+    local ability = nil;
+    if (rank == 1) then
+      ability = action;
+    else
+      ability = mgr:GetAbilityByName(action.Name[2] .. ' ' .. ('i'):rep(rank), 2);
+    end
+    if (player:HasAbility(ability.Id)) then
+      return function()
+        if (rank == 1) then
+          AshitaCore:GetChatManager():QueueCommand('/pet "' .. action.Name[2] .. '" ' .. target, -1);
+        else
+          AshitaCore:GetChatManager():QueueCommand('/pet "' .. action.Name[2] .. ' ' .. ('i'):rep(rank) .. '" ' .. target, -1);
+        end
+        print(action.Description[2]);
       end
     end
-
-    actions[i] = {
-      action = function()
-        if (rank == 1) then
-          AshitaCore:GetChatManager():QueueCommand('/pet "' .. pactions[i].action.Name[2] .. '" ' .. pactions[i].target, -1);
-        else
-          AshitaCore:GetChatManager():QueueCommand('/pet "' .. pactions[i].action.Name[2] .. ' ' .. ('i'):rep(rank) .. '" ' .. pactions[i].target, -1);
-        end
-      end,
-      name = pactions[i].action.Name[2];
-    };
   end
-  return actions;
 end
 
 return actions;

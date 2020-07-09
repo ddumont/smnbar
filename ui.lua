@@ -57,17 +57,15 @@ end
 
 function ui:PetBar()
   if (not util:HasPet()) then return end;
-  local buttons = actions:GetPetActions();
-  local nbuttons = #buttons;
+  local buttons = textures:PetButtons();
 
   imgui.PushStyleVar(ImGuiStyleVar_FramePadding, FRAME_PADDING_H, FRAME_PADDING_H);
   imgui.SetNextWindowPos(X + DRAG_W + FRAME_PADDING_W * 2, Y + H, ImGuiSetCond_Always);
   imgui.Begin('petbar', true, bit.bor(FRAME_FLAGS, ImGuiWindowFlags_NoMove));
   imgui.PushStyleVar(ImGuiStyleVar_ItemSpacing, ITEM_SPACING_W, ITEM_SPACING_H);
-  for i = 1, nbuttons do
-    local button = buttons[i];
+  for i, button in ipairs(buttons or {}) do
     if (i > 1) then imgui.SameLine(); end
-    if (imgui.Button(button.name, BUTTON_W * 0.75, BUTTON_H * 0.75)) then
+    if (imgui.ImageButton(button.ptr, BUTTON_W * 0.75, BUTTON_H * 0.75)) then
       button.action();
     end
   end
