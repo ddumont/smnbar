@@ -3,29 +3,7 @@ local util = require 'util';
 local mgr = AshitaCore:GetResourceManager();
 local textures = {};
 
-local buttons = {
-  { texture = nil, ptr = nil, action = nil, name = 'carbuncle', commands = {
-    { texture = nil, ptr = nil, action = nil, command = mgr:GetAbilityByName('assault', 0),         target = '<stnpc>',   ranks = 1 },
-    { texture = nil, ptr = nil, action = nil, command = mgr:GetAbilityByName('retreat', 0),         target = '<me>',   ranks = 1 },
-    { texture = nil, ptr = nil, action = nil, command = mgr:GetAbilityByName('release', 0),         target = '<me>',   ranks = 1 },
-    { texture = nil, ptr = nil, action = nil, command = mgr:GetAbilityByName('poison nails', 0),    target = '<stnpc>',    ranks = 1 },
-    { texture = nil, ptr = nil, action = nil, command = mgr:GetAbilityByName('meteorite', 0),       target = '<stnpc>',    ranks = 1 },
-    { texture = nil, ptr = nil, action = nil, command = mgr:GetAbilityByName('healing ruby', 0),    target = '<stpc>', ranks = 2 },
-    { texture = nil, ptr = nil, action = nil, command = mgr:GetAbilityByName('shining ruby', 0),    target = '<stpc>', ranks = 1 },
-    { texture = nil, ptr = nil, action = nil, command = mgr:GetAbilityByName('glittering ruby', 0), target = '<stpc>', ranks = 1 },
-  } },
-  { texture = nil, ptr = nil, action = nil, name = 'titan' },
-  { texture = nil, ptr = nil, action = nil, name = 'leviathan' },
-  { texture = nil, ptr = nil, action = nil, name = 'garuda' },
-  { texture = nil, ptr = nil, action = nil, name = 'ifrit' },
-  { texture = nil, ptr = nil, action = nil, name = 'shiva' },
-  { texture = nil, ptr = nil, action = nil, name = 'ramuh' },
-  { texture = nil, ptr = nil, action = nil, name = 'fenrir' },
-  { texture = nil, ptr = nil, action = nil, name = 'diabolos' },
-  { texture = nil, ptr = nil, action = nil, name = 'cait sith' },
-  { texture = nil, ptr = nil, action = nil, name = 'atomos' },
-  { texture = nil, ptr = nil, action = nil, name = 'siren' },
-};
+local buttons = require 'buttons';
 
 local ctrl_buttons = {
   { texture = nil, ptr = nil, actions = nil, name = 'light spirit' },
@@ -61,9 +39,11 @@ function textures:Load()
       texture.action = actions:Get(texture.name);
 
       for _, command in ipairs(texture.commands or {}) do
-        command.texture = load_texture(command.command.Name[2]:lower(), 48);
-        if (command.texture ~= nil) then
-          command.ptr = command.texture:Get();
+        if (command.command) then
+          command.texture = load_texture(command.command, 48);
+          if (command.texture ~= nil) then
+            command.ptr = command.texture:Get();
+          end
         end
       end
     end
@@ -78,7 +58,7 @@ function textures:Unload()
       texture.ptr = nil;
       texture.action = nil;
 
-      for _, command in ipairs(texture.commands) do
+      for _, command in ipairs(texture.commands or {}) do
         if (command.texture ~= nil) then
           command.texture:Release();
           command.texture = nil;
@@ -105,8 +85,9 @@ function textures:PetButtons()
   end
 
   local pet, lastpet = util:PetName();
-  if (pet == lastpet) then return pet_buttons end
+  if (pet == lastpet) then return pet_buttons end -- use the table we generated last time to save time
 
+  -- assemble new table of actions for the current pet and save it off for next render
   pet_buttons = {};
   local commands = nil;
   for _, button in ipairs(buttons) do

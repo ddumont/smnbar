@@ -1,6 +1,7 @@
 require 'timer';
 local util = require 'util';
 local mgr = AshitaCore:GetResourceManager();
+local numerals = { '', ' ii', ' iii', ' iv', ' v', 'vi' };
 
 local function do_summon(thing)
   local target = '<me>';
@@ -33,24 +34,17 @@ function actions:Get(thing)
 end
 
 function actions:GetPetAction(action, ranks, target)
+  if (action == nil) then print(ranks); return nil end
   local player = AshitaCore:GetDataManager():GetPlayer();
   local rank = 1;
 
   for rank = ranks, 1, -1 do
-    local ability = nil;
-    if (rank == 1) then
-      ability = action;
-    else
-      ability = mgr:GetAbilityByName(action.Name[2] .. ' ' .. ('i'):rep(rank), 2);
-    end
-    if (player:HasAbility(ability.Id)) then
+    local ability = mgr:GetAbilityByName(action .. numerals[rank], 2);
+    if (ability ~= nil and player:HasAbility(ability.Id)) then
       return function()
-        if (rank == 1) then
-          AshitaCore:GetChatManager():QueueCommand('/pet "' .. action.Name[2] .. '" ' .. target, -1);
-        else
-          AshitaCore:GetChatManager():QueueCommand('/pet "' .. action.Name[2] .. ' ' .. ('i'):rep(rank) .. '" ' .. target, -1);
-        end
-        print(action.Description[2]);
+        print(action)
+        AshitaCore:GetChatManager():QueueCommand('/pet "' .. action .. numerals[rank] .. '" ' .. target, -1);
+        print(ability.Description[2]);
       end
     end
   end
