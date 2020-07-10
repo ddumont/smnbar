@@ -4,17 +4,7 @@ local mgr = AshitaCore:GetResourceManager();
 local textures = {};
 
 local buttons = require 'buttons';
-
-local ctrl_buttons = {
-  { texture = nil, ptr = nil, actions = nil, name = 'light spirit' },
-  { texture = nil, ptr = nil, actions = nil, name = 'earth spirit' },
-  { texture = nil, ptr = nil, actions = nil, name = 'water spirit' },
-  { texture = nil, ptr = nil, actions = nil, name = 'wind spirit' },
-  { texture = nil, ptr = nil, actions = nil, name = 'fire spirit' },
-  { texture = nil, ptr = nil, actions = nil, name = 'ice spirit' },
-  { texture = nil, ptr = nil, actions = nil, name = 'thunder spirit' },
-  { texture = nil, ptr = nil, actions = nil, name = 'dark spirit' },
-};
+local ctrl_buttons = require 'ctrl_buttons';
 
 local pet_buttons = nil; -- updated on pet change
 
@@ -90,7 +80,12 @@ function textures:PetButtons()
   -- assemble new table of actions for the current pet and save it off for next render
   pet_buttons = {};
   local commands = nil;
-  for _, button in ipairs(buttons) do
+  local spirit = pet:lower():match('(.+)spirit');
+  if (spirit) then
+    pet = spirit .. ' spirit' -- there's no space in the ashita name
+  end
+
+  for _, button in ipairs(spirit == nil and buttons or ctrl_buttons) do
     if (button.name == pet:lower()) then
       commands = button.commands;
       break;
