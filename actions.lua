@@ -42,9 +42,7 @@ function actions:GetPetAction(action, ranks, target)
     local ability = mgr:GetAbilityByName(action .. numerals[rank], 2);
     if (ability ~= nil and player:HasAbility(ability.Id)) then
       return function()
-        print(action)
         AshitaCore:GetChatManager():QueueCommand('/pet "' .. action .. numerals[rank] .. '" ' .. target, -1);
-        print(ability.Description[2]);
       end, ability;
     end
   end
