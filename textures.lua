@@ -19,13 +19,13 @@ local ctrl_buttons = {
 local pet_buttons = nil; -- updated on pet change
 
 local function load_texture(name, size)
-  local path = string.format('%s/' .. size .. '/%s.png', _addon.path, name);
+  local path = string.format('%s/' .. size .. '/%s.png', _addon.path, name):gsub("[%?']", '_');
 
   local res, texture = ashita.d3dx.CreateTextureFromFileA(path);
   if (res ~= 0) then
     -- Get the error information..
     local _, err = ashita.d3dx.GetErrorStringA(res);
-    print(string.format('[Error] Failed to load background texture for slot: %s - Error: (%08X) %s', name, res, err));
+    print(string.format('[Error] Failed to load background texture for slot: %s - Error: (%08X) %s', path, res, err));
     return nil;
   end
   return texture;
