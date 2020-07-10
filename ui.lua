@@ -68,6 +68,15 @@ function ui:PetBar()
     if (imgui.ImageButton(button.ptr, BUTTON_W * 0.75, BUTTON_H * 0.75)) then
       button.action();
     end
+    if (imgui.IsItemHovered()) then
+        imgui.BeginTooltip();
+        imgui.PushTextWrapPos(imgui.GetFontSize() * 50);
+        imgui.TextUnformatted(button.ability.Name[2]);
+        imgui.Separator();
+        imgui.TextUnformatted(button.ability.Description[2]);
+        imgui.PopTextWrapPos();
+        imgui.EndTooltip();
+    end
   end
   imgui.PopStyleVar();
   imgui.End();

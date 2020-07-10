@@ -45,7 +45,7 @@ function actions:GetPetAction(action, ranks, target)
         print(action)
         AshitaCore:GetChatManager():QueueCommand('/pet "' .. action .. numerals[rank] .. '" ' .. target, -1);
         print(ability.Description[2]);
-      end
+      end, ability;
     end
   end
 end

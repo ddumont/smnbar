@@ -107,9 +107,10 @@ function textures:PetButtons()
 
   commands = commands or {};
   for i, command in ipairs(commands) do
-    local action = actions:GetPetAction(command.command, command.ranks, command.target);
+    local action, ability = actions:GetPetAction(command.command, command.ranks, command.target);
     if (action ~= nil) then
       command.action = action;
+      command.ability = ability;
       table.insert(pet_buttons, command);
     end
   end
