@@ -71,9 +71,9 @@ function ui:PetBar()
     if (imgui.IsItemHovered()) then
         imgui.BeginTooltip();
         imgui.PushTextWrapPos(imgui.GetFontSize() * 50);
-        imgui.TextUnformatted(button.ability.Name[2]);
+        imgui.TextColored(1.0, 1.0, 0.4, 1.0, button.ability.Name[2]);
         imgui.Separator();
-        imgui.TextUnformatted(button.ability.Description[2]);
+        imgui.TextColored(1.0, 0.6, 0.4, 1.0, button.ability.Description[2]);
         imgui.PopTextWrapPos();
         imgui.EndTooltip();
     end
