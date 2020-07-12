@@ -69,12 +69,11 @@ function textures:CtrlButtons()
 end
 
 function textures:PetButtons()
-  if (not util:HasPet()) then
+  local pet, lastpet = util:PetName();
+  if (not util:HasPet() or pet == nil) then
     pet_buttons = nil;
     return pet_buttons;
   end
-
-  local pet, lastpet = util:PetName();
   if (pet == lastpet) then return pet_buttons end -- use the table we generated last time to save time
 
   -- assemble new table of actions for the current pet and save it off for next render
