@@ -13,10 +13,11 @@ end);
 local ctrlDown = false;
 local altDown = false;
 local shiftDown = false;
+local keyDown = nil;
 
 ashita.register_event('render', function()
-  ui:MainBar(ctrlDown);
-  ui:PetBar(ctrlDown);
+  ui:MainBar(ctrlDown, altDown, shiftDown, keyDown);
+  ui:PetBar(ctrlDown, altDown, shiftDown, keyDown);
 end);
 
 ashita.register_event('key', function(key, down, blocked)
@@ -29,7 +30,13 @@ ashita.register_event('key', function(key, down, blocked)
     altDown = down;
   elseif (key == 0x2A or key == 0x36) then -- shift
     shiftDown = down;
-  elseif (not down and not shiftDown and not altDown and not ctrlDown) then -- no modifiers
+  elseif (key == 0x29) then -- backtick
+    keyDown = down and 1 or nil;
+  elseif (key > 0x01 and key < 0x0E) then -- 1,2,3,4,5,6,7,8,9,0,-,=
+    keyDown = down and key or nil;
+  end
+
+  if (not down and not shiftDown and not altDown and not ctrlDown) then -- no modifiers
     if (key == 0x29) then -- backtick
       buttons[1].action();
     end
