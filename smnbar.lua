@@ -36,6 +36,7 @@ ashita.register_event('key', function(key, down, blocked)
     keyDown = down and key or nil;
   end
 
+  if (buttons == nil) then return false end;
   if (not down and not shiftDown and not altDown and not ctrlDown) then -- no modifiers
     if (key == 0x29) then -- backtick
       buttons[1].action();
