@@ -13,6 +13,7 @@ end);
 local ctrlDown = false;
 local altDown = false;
 local shiftDown = false;
+local winDown = false;
 local keyDown = nil;
 
 ashita.register_event('render', function()
@@ -30,6 +31,8 @@ ashita.register_event('key', function(key, down, blocked)
     altDown = down;
   elseif (key == 0x2A or key == 0x36) then -- shift
     shiftDown = down;
+  elseif (key == 0xDB or key == 0xDC) then -- shift
+    winDown = down;
   elseif (key == 0x29) then -- backtick
     keyDown = down and 1 or nil;
   elseif (key > 0x01 and key < 0x0E) then -- 1,2,3,4,5,6,7,8,9,0,-,=
@@ -37,11 +40,10 @@ ashita.register_event('key', function(key, down, blocked)
   end
 
   if (buttons == nil) then return false end;
-  if (not down and not shiftDown and not altDown and not ctrlDown) then -- no modifiers
+  if (not down and not shiftDown and not altDown and not ctrlDown and not winDown) then -- no modifiers
     if (key == 0x29) then -- backtick
       buttons[1].action();
-    end
-    if (key > 0x01 and key < 0x0E and buttons[key] ~= nil) then -- 1,2,3,4,5,6,7,8,9,0,-,=
+    elseif (key > 0x01 and key < 0x0E and buttons[key] ~= nil) then -- 1,2,3,4,5,6,7,8,9,0,-,=
       -- It just so happens to line up.
       buttons[key].action();
     end
