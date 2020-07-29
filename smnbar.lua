@@ -1,6 +1,6 @@
 _addon.author   = 'Yarbles - Asura';
 _addon.name     = 'smnbar';
-_addon.version  = '1.1.1';
+_addon.version  = '1.2.0';
 
 require 'common';
 local ui = require 'ui';
