@@ -4,7 +4,8 @@ local mgr = AshitaCore:GetResourceManager();
 local textures = {};
 
 local buttons = require 'buttons';
-local ctrl_buttons = require 'ctrl_buttons';
+local spirit_buttons = require 'spirit_buttons';
+local ja_buttons = require 'ja_buttons';
 
 local pet_buttons = nil; -- updated on pet change
 
@@ -22,11 +23,20 @@ local function load_texture(name, size)
 end
 
 function textures:Load()
-  for _, textures in ipairs({ buttons, ctrl_buttons }) do
+  for _, textures in ipairs({ buttons, spirit_buttons, ja_buttons }) do
     for _, texture in ipairs(textures) do
-      texture.texture = load_texture(texture.name, 64);
-      texture.ptr = texture.texture:Get();
-      texture.action = actions:Get(texture.name);
+      if (textures == ja_buttons) then
+        texture.texture = load_texture(texture.command, 48);
+        local action, ability = actions:GetJaAction(texture.command, texture.target);
+        texture.action = action;
+        texture.ability = ability;
+      else
+        texture.texture = load_texture(texture.name, 64);
+        texture.action = actions:Get(texture.name);
+      end
+      if (texture.texture) then
+        texture.ptr = texture.texture:Get();
+      end
 
       for _, command in ipairs(texture.commands or {}) do
         if (command.command) then
@@ -41,7 +51,7 @@ function textures:Load()
 end
 
 function textures:Unload()
-  for _, textures in ipairs({ buttons, ctrl_buttons }) do
+  for _, textures in ipairs({ buttons, spirit_buttons, ja_buttons }) do
     for _, texture in ipairs(textures) do
       texture.texture:Release();
       texture.texture = nil;
@@ -64,8 +74,12 @@ function textures:Buttons()
   return buttons;
 end
 
-function textures:CtrlButtons()
-  return ctrl_buttons;
+function textures:SpiritButtons()
+  return spirit_buttons;
+end
+
+function textures:JaButtons()
+  return ja_buttons;
 end
 
 function textures:PetButtons()
@@ -84,14 +98,14 @@ function textures:PetButtons()
     pet = spirit .. ' spirit' -- there's no space in the ashita name
   end
 
-  for _, button in ipairs(spirit == nil and buttons or ctrl_buttons) do
+  for _, button in ipairs(spirit == nil and buttons or spirit_buttons) do
     if (button.name == pet:lower()) then
       commands = button.commands;
       break;
     end
   end
   if (commands == nil) then
-    for _, button in ipairs(ctrl_buttons) do
+    for _, button in ipairs(spirit_buttons) do
       if (button.name == pet:lower()) then
         commands = button.commands;
         break;

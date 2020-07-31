@@ -48,4 +48,14 @@ function actions:GetPetAction(action, ranks, target)
   end
 end
 
+function actions:GetJaAction(command, target)
+  local player = AshitaCore:GetDataManager():GetPlayer();
+  local ability = mgr:GetAbilityByName(command, 2);
+  if (ability ~= nil) then
+    return function()
+      AshitaCore:GetChatManager():QueueCommand('/ja "' .. command .. '" ' .. target, -1);
+    end, ability;
+  end
+end
+
 return actions;
